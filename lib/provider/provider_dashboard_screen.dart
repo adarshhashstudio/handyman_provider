@@ -56,10 +56,12 @@ class ProviderDashboardScreenState extends State<ProviderDashboardScreen> {
 
         window.onPlatformBrightnessChanged = () async {
           if (getIntAsync(THEME_MODE_INDEX) == THEME_MODE_SYSTEM) {
-            appStore.setDarkMode(context.platformBrightness() == Brightness.light);
+            appStore
+                .setDarkMode(context.platformBrightness() == Brightness.light);
           }
         };
-        OneSignal.shared.sendTag(ONESIGNAL_TAG_KEY, ONESIGNAL_TAG_PROVIDER_VALUE);
+        OneSignal.shared
+            .sendTag(ONESIGNAL_TAG_KEY, ONESIGNAL_TAG_PROVIDER_VALUE);
       },
     );
 
@@ -89,7 +91,8 @@ class ProviderDashboardScreenState extends State<ProviderDashboardScreen> {
       onWillPop: () {
         DateTime now = DateTime.now();
 
-        if (currentBackPressTime == null || now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
+        if (currentBackPressTime == null ||
+            now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
           currentBackPressTime = now;
           toast(languages.lblCloseAppMsg);
           return Future.value(false);
@@ -99,7 +102,7 @@ class ProviderDashboardScreenState extends State<ProviderDashboardScreen> {
       child: Scaffold(
         appBar: appBarWidget(
           [
-            languages.providerHome,
+            'K&C Services',
             languages.lblBooking,
             languages.lblPayment,
             languages.lblProfile,
@@ -128,9 +131,12 @@ class ProviderDashboardScreenState extends State<ProviderDashboardScreen> {
                           return Container(
                             padding: EdgeInsets.all(4),
                             child: FittedBox(
-                              child: Text(appStore.notificationCount.toString(), style: primaryTextStyle(size: 12, color: Colors.white)),
+                              child: Text(appStore.notificationCount.toString(),
+                                  style: primaryTextStyle(
+                                      size: 12, color: Colors.white)),
                             ),
-                            decoration: boxDecorationDefault(color: Colors.red, shape: BoxShape.circle),
+                            decoration: boxDecorationDefault(
+                                color: Colors.red, shape: BoxShape.circle),
                           );
 
                         return Offstage();
@@ -153,7 +159,8 @@ class ProviderDashboardScreenState extends State<ProviderDashboardScreen> {
             data: NavigationBarThemeData(
               backgroundColor: context.primaryColor.withOpacity(0.02),
               indicatorColor: context.primaryColor.withOpacity(0.1),
-              labelTextStyle: MaterialStateProperty.all(primaryTextStyle(size: 12)),
+              labelTextStyle:
+                  MaterialStateProperty.all(primaryTextStyle(size: 12)),
               surfaceTintColor: Colors.transparent,
               shadowColor: Colors.transparent,
             ),
@@ -162,22 +169,26 @@ class ProviderDashboardScreenState extends State<ProviderDashboardScreen> {
               destinations: [
                 NavigationDestination(
                   icon: ic_home.iconImage(color: appTextSecondaryColor),
-                  selectedIcon: ic_fill_home.iconImage(color: context.primaryColor),
+                  selectedIcon:
+                      ic_fill_home.iconImage(color: context.primaryColor),
                   label: languages.home,
                 ),
                 NavigationDestination(
                   icon: total_booking.iconImage(color: appTextSecondaryColor),
-                  selectedIcon: fill_ticket.iconImage(color: context.primaryColor),
+                  selectedIcon:
+                      fill_ticket.iconImage(color: context.primaryColor),
                   label: languages.lblBooking,
                 ),
                 NavigationDestination(
                   icon: un_fill_wallet.iconImage(color: appTextSecondaryColor),
-                  selectedIcon: ic_fill_wallet.iconImage(color: context.primaryColor),
+                  selectedIcon:
+                      ic_fill_wallet.iconImage(color: context.primaryColor),
                   label: languages.lblPayment,
                 ),
                 NavigationDestination(
                   icon: profile.iconImage(color: appTextSecondaryColor),
-                  selectedIcon: ic_fill_profile.iconImage(color: context.primaryColor),
+                  selectedIcon:
+                      ic_fill_profile.iconImage(color: context.primaryColor),
                   label: languages.lblProfile,
                 ),
               ],

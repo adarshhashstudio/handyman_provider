@@ -24,7 +24,8 @@ class HandymanDashboardScreen extends StatefulWidget {
   HandymanDashboardScreen({this.index});
 
   @override
-  _HandymanDashboardScreenState createState() => _HandymanDashboardScreenState();
+  _HandymanDashboardScreenState createState() =>
+      _HandymanDashboardScreenState();
 }
 
 class _HandymanDashboardScreenState extends State<HandymanDashboardScreen> {
@@ -53,7 +54,8 @@ class _HandymanDashboardScreenState extends State<HandymanDashboardScreen> {
 
       window.onPlatformBrightnessChanged = () async {
         if (getIntAsync(THEME_MODE_INDEX) == THEME_MODE_SYSTEM) {
-          appStore.setDarkMode(context.platformBrightness() == Brightness.light);
+          appStore
+              .setDarkMode(context.platformBrightness() == Brightness.light);
         }
       };
 
@@ -92,7 +94,7 @@ class _HandymanDashboardScreenState extends State<HandymanDashboardScreen> {
       body: fragmentList[currentIndex],
       appBar: appBarWidget(
         [
-          languages.handymanHome,
+          'K&C Services',
           languages.lblBooking,
           languages.notification,
           languages.lblProfile,
@@ -137,7 +139,8 @@ class _HandymanDashboardScreenState extends State<HandymanDashboardScreen> {
           data: NavigationBarThemeData(
             backgroundColor: context.primaryColor.withOpacity(0.02),
             indicatorColor: context.primaryColor.withOpacity(0.1),
-            labelTextStyle: MaterialStateProperty.all(primaryTextStyle(size: 12)),
+            labelTextStyle:
+                MaterialStateProperty.all(primaryTextStyle(size: 12)),
             surfaceTintColor: Colors.transparent,
             shadowColor: Colors.transparent,
           ),
@@ -146,12 +149,14 @@ class _HandymanDashboardScreenState extends State<HandymanDashboardScreen> {
             destinations: [
               NavigationDestination(
                 icon: ic_home.iconImage(color: appTextSecondaryColor),
-                selectedIcon: ic_fill_home.iconImage(color: context.primaryColor),
+                selectedIcon:
+                    ic_fill_home.iconImage(color: context.primaryColor),
                 label: languages.home,
               ),
               NavigationDestination(
                 icon: total_booking.iconImage(color: appTextSecondaryColor),
-                selectedIcon: fill_ticket.iconImage(color: context.primaryColor),
+                selectedIcon:
+                    fill_ticket.iconImage(color: context.primaryColor),
                 label: languages.lblBooking,
               ),
               NavigationDestination(
@@ -167,9 +172,12 @@ class _HandymanDashboardScreenState extends State<HandymanDashboardScreen> {
                           return Container(
                             padding: EdgeInsets.all(4),
                             child: FittedBox(
-                              child: Text(appStore.notificationCount.toString(), style: primaryTextStyle(size: 12, color: Colors.white)),
+                              child: Text(appStore.notificationCount.toString(),
+                                  style: primaryTextStyle(
+                                      size: 12, color: Colors.white)),
                             ),
-                            decoration: boxDecorationDefault(color: Colors.red, shape: BoxShape.circle),
+                            decoration: boxDecorationDefault(
+                                color: Colors.red, shape: BoxShape.circle),
                           );
 
                         return Offstage();
@@ -189,9 +197,12 @@ class _HandymanDashboardScreenState extends State<HandymanDashboardScreen> {
                           return Container(
                             padding: EdgeInsets.all(4),
                             child: FittedBox(
-                              child: Text(appStore.notificationCount.toString(), style: primaryTextStyle(size: 12, color: Colors.white)),
+                              child: Text(appStore.notificationCount.toString(),
+                                  style: primaryTextStyle(
+                                      size: 12, color: Colors.white)),
                             ),
-                            decoration: boxDecorationDefault(color: Colors.red, shape: BoxShape.circle),
+                            decoration: boxDecorationDefault(
+                                color: Colors.red, shape: BoxShape.circle),
                           );
 
                         return Offstage();
@@ -203,7 +214,8 @@ class _HandymanDashboardScreenState extends State<HandymanDashboardScreen> {
               ),
               NavigationDestination(
                 icon: profile.iconImage(color: appTextSecondaryColor),
-                selectedIcon: ic_fill_profile.iconImage(color: context.primaryColor),
+                selectedIcon:
+                    ic_fill_profile.iconImage(color: context.primaryColor),
                 label: languages.lblProfile,
               ),
             ],
