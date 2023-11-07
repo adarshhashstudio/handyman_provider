@@ -330,8 +330,7 @@ class BookingItemComponentState extends State<BookingItemComponent> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(languages.hintDescription,
-                                style: secondaryTextStyle()),
+                            Text('Comments', style: secondaryTextStyle()),
                             8.width,
                             Text('${widget.bookingData.description.validate()}',
                                     maxLines: 1,

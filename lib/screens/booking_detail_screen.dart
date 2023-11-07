@@ -483,7 +483,8 @@ class BookingDetailScreenState extends State<BookingDetailScreen> {
           children: [
             8.height,
             Text(
-                "${languages.lblBooking.split('s').join(' ')}${languages.hintDescription}",
+                // "${languages.lblBooking.split('s').join(' ')}${languages.hintDescription}",
+                'Comments',
                 style: boldTextStyle(size: LABEL_TEXT_SIZE)),
             8.height,
             ReadMoreText(

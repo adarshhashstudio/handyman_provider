@@ -59,16 +59,22 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
     );
   }
 
-  Widget customerReviewWidget({required List<RatingData> data, int? serviceId, required ServiceDetailResponse serviceDetailResponse}) {
+  Widget customerReviewWidget(
+      {required List<RatingData> data,
+      int? serviceId,
+      required ServiceDetailResponse serviceDetailResponse}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         16.height,
         ViewAllLabel(
-          label: '${languages.review} (${serviceDetailResponse.serviceDetail!.totalReview})',
+          label:
+              '${languages.review} (${serviceDetailResponse.serviceDetail!.totalReview})',
           list: data,
           onTap: () {
-            RatingViewAllScreen(serviceId: serviceId).launch(context).then((value) => init());
+            RatingViewAllScreen(serviceId: serviceId)
+                .launch(context)
+                .then((value) => init());
           },
         ),
         8.height,
@@ -92,7 +98,8 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(languages.availableAt, style: boldTextStyle(size: LABEL_TEXT_SIZE)),
+          Text(languages.availableAt,
+              style: boldTextStyle(size: LABEL_TEXT_SIZE)),
           16.height,
           Wrap(
             spacing: 16,
@@ -100,7 +107,8 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
             children: List.generate(
               data.serviceAddressMapping!.length,
               (index) {
-                ServiceAddressMapping value = data.serviceAddressMapping![index];
+                ServiceAddressMapping value =
+                    data.serviceAddressMapping![index];
                 if (value.providerAddressMapping == null) return Offstage();
 
                 return Container(
@@ -147,7 +155,8 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(languages.hintDescription, style: boldTextStyle(size: LABEL_TEXT_SIZE)),
+              Text(languages.hintDescription,
+                  style: boldTextStyle(size: LABEL_TEXT_SIZE)),
               16.height,
               snap.data!.serviceDetail!.description.validate().isNotEmpty
                   ? ReadMoreText(
@@ -156,13 +165,20 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
                       textAlign: TextAlign.justify,
                       colorClickableText: context.primaryColor,
                     )
-                  : Text(languages.lblNoDescriptionAvailable, style: secondaryTextStyle()),
+                  : Text(languages.lblNoDescriptionAvailable,
+                      style: secondaryTextStyle()),
             ],
           ).paddingAll(16),
           availableWidget(data: snap.data!.serviceDetail!),
-          PackageComponent(servicePackage: snap.data!.serviceDetail!.servicePackage.validate()),
-          if (snap.data!.serviceFaq.validate().isNotEmpty) serviceFaqWidget(data: snap.data!.serviceFaq.validate()),
-          customerReviewWidget(data: snap.data!.ratingData!, serviceId: snap.data!.serviceDetail!.id, serviceDetailResponse: snap.data!),
+          PackageComponent(
+              servicePackage:
+                  snap.data!.serviceDetail!.servicePackage.validate()),
+          if (snap.data!.serviceFaq.validate().isNotEmpty)
+            serviceFaqWidget(data: snap.data!.serviceFaq.validate()),
+          customerReviewWidget(
+              data: snap.data!.ratingData!,
+              serviceId: snap.data!.serviceDetail!.id,
+              serviceDetailResponse: snap.data!),
           24.height,
         ],
       );
@@ -174,7 +190,10 @@ class ServiceDetailScreenState extends State<ServiceDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<ServiceDetailResponse>(
-      initialData: listOfCachedData.firstWhere((element) => element?.$1 == widget.serviceId.validate(), orElse: () => null)?.$2,
+      initialData: listOfCachedData
+          .firstWhere((element) => element?.$1 == widget.serviceId.validate(),
+              orElse: () => null)
+          ?.$2,
       future: getServiceDetail({'service_id': widget.serviceId.validate()}),
       builder: (context, snap) {
         return Scaffold(
