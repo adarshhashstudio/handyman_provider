@@ -845,11 +845,77 @@ class BookingDetailScreenState extends State<BookingDetailScreen> {
     } else if (res.bookingDetail!.status == BookingStatusKeys.inProgress) {
       showBottomActionBar = true;
 
-      return Text(res.bookingDetail!.statusLabel.validate(),
-              style: boldTextStyle())
-          .center();
+      // return Text(res.bookingDetail!.statusLabel.validate(),
+      //         style: boldTextStyle())
+      //     .center();
+      return Row(
+        children: [
+          Expanded(
+            child: AppButton(
+              text: res.bookingDetail!.statusLabel.validate(),
+              textColor: black,
+              color: white,
+              onTap: () {},
+            ),
+          ),
+          16.width,
+          Expanded(
+            child: AppButton(
+              text: 'Done',
+              color: primaryColor,
+              onTap: () {
+                _handleDoneClick(status: res);
+              },
+            ),
+          ),
+        ],
+      );
     }
     return Offstage();
+  }
+
+  //region Methods
+  void commonStartTimer(
+      {required bool isHourlyService,
+      required String status,
+      required int timeInSec}) {
+    if (isHourlyService) {
+      Map<String, dynamic> liveStreamRequest = {
+        "inSeconds": timeInSec,
+        "status": status,
+      };
+      LiveStream().emit(LIVESTREAM_START_TIMER, liveStreamRequest);
+    }
+  }
+
+  //region Done Service
+  void _handleDoneClick({required BookingDetailResponse status}) {
+    showConfirmDialogCustom(
+      context,
+      negativeText: languages.lblNo,
+      dialogType: DialogType.CONFIRMATION,
+      primaryColor: context.primaryColor,
+      title: 'Do you want to end this service?',
+      positiveText: languages.lblYes,
+      onAccept: (c) async {
+        appStore.setLoading(true);
+
+        await updateBooking(status, '', BookingStatusKeys.complete)
+            .then((res) async {
+          commonStartTimer(
+              isHourlyService: status.bookingDetail!.isHourlyService,
+              status: BookingStatusKeys.complete,
+              timeInSec: status.bookingDetail!.durationDiff.validate().toInt());
+
+          appStore.setLoading(false);
+          init();
+          setState(() {});
+        }).catchError((e) {
+          appStore.setLoading(false);
+          toast(e.toString(), print: true);
+        });
+      },
+    );
   }
 
   Widget extraChargesWidget(
@@ -1178,11 +1244,11 @@ class BookingDetailScreenState extends State<BookingDetailScreen> {
                   //     ],
                   //   ).paddingOnly(left: 16, right: 16, bottom: 16),
 
-                  CashPaymentHistoryScreen(
-                    bookingId:
-                        res.data!.bookingDetail!.id.validate().toString(),
-                    key: _paymentUniqueKey,
-                  ),
+                  // CashPaymentHistoryScreen(
+                  //   bookingId:
+                  //       res.data!.bookingDetail!.id.validate().toString(),
+                  //   key: _paymentUniqueKey,
+                  // ),
 
                   /// Customer Review Widget
                   if (res.data!.ratingData.validate().isNotEmpty)
@@ -1235,7 +1301,14 @@ class BookingDetailScreenState extends State<BookingDetailScreen> {
           },
           child: AppScaffold(
             appBarTitle: snap.hasData
-                ? snap.data!.bookingDetail!.status.validate().toBookingStatus()
+                ? snap.data!.bookingDetail!.status
+                            .validate()
+                            .toBookingStatus() ==
+                        'Hold'
+                    ? 'On Hold'
+                    : snap.data!.bookingDetail!.status
+                        .validate()
+                        .toBookingStatus()
                 : "",
             actions: [
               if (snap.hasData)

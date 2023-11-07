@@ -165,9 +165,7 @@ class BookingItemComponentState extends State<BookingItemComponent> {
                             ),
                             child: Marquee(
                               child: Text(
-                                widget.bookingData.status
-                                    .validate()
-                                    .toBookingStatus(),
+                                '${widget.bookingData.status.validate().toBookingStatus() == 'Hold' ? 'On Hold' : widget.bookingData.status.validate().toBookingStatus()}',
                                 style: boldTextStyle(
                                     color: widget.bookingData.status
                                         .validate()
@@ -317,6 +315,27 @@ class BookingItemComponentState extends State<BookingItemComponent> {
                                 style: secondaryTextStyle()),
                             8.width,
                             Text(widget.bookingData.customerName.validate(),
+                                    style: boldTextStyle(size: 12),
+                                    textAlign: TextAlign.right)
+                                .flexible(),
+                          ],
+                        ).paddingAll(8),
+                      ],
+                    ),
+                  if (widget.bookingData.description.validate().isNotEmpty)
+                    Column(
+                      children: [
+                        Divider(height: 0, color: context.dividerColor),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(languages.hintDescription,
+                                style: secondaryTextStyle()),
+                            8.width,
+                            Text('${widget.bookingData.description.validate()}',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                     style: boldTextStyle(size: 12),
                                     textAlign: TextAlign.right)
                                 .flexible(),
