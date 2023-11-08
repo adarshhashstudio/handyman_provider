@@ -103,7 +103,7 @@ class ProviderDashboardScreenState extends State<ProviderDashboardScreen> {
         appBar: appBarWidget(
           [
             'K&C Services',
-            languages.lblBooking,
+            'Service Requests',
             languages.lblPayment,
             languages.lblProfile,
           ][currentIndex],
@@ -177,7 +177,7 @@ class ProviderDashboardScreenState extends State<ProviderDashboardScreen> {
                   icon: total_booking.iconImage(color: appTextSecondaryColor),
                   selectedIcon:
                       fill_ticket.iconImage(color: context.primaryColor),
-                  label: languages.lblBooking,
+                  label: 'Requests',
                 ),
                 NavigationDestination(
                   icon: un_fill_wallet.iconImage(color: appTextSecondaryColor),

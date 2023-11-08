@@ -95,7 +95,7 @@ class _HandymanDashboardScreenState extends State<HandymanDashboardScreen> {
       appBar: appBarWidget(
         [
           'K&C Services',
-          languages.lblBooking,
+          'Service Requests',
           languages.notification,
           languages.lblProfile,
         ][currentIndex],
@@ -157,7 +157,7 @@ class _HandymanDashboardScreenState extends State<HandymanDashboardScreen> {
                 icon: total_booking.iconImage(color: appTextSecondaryColor),
                 selectedIcon:
                     fill_ticket.iconImage(color: context.primaryColor),
-                label: languages.lblBooking,
+                label: 'Requests',
               ),
               NavigationDestination(
                 icon: Stack(
