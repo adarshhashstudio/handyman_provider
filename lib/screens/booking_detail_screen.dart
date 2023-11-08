@@ -743,7 +743,7 @@ class BookingDetailScreenState extends State<BookingDetailScreen> {
                   negativeText: languages.lblNo,
                   onAccept: (c) {
                     appStore.setLoading(true);
-                    updateBooking(res, '', BookingStatusKeys.onGoing);
+                    updateBooking(res, '', BookingStatusKeys.inProgress);
                   },
                 );
               },
