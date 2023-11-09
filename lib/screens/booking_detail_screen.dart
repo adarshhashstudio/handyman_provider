@@ -26,6 +26,7 @@ import 'package:handyman_provider_flutter/screens/cash_management/component/cash
 import 'package:handyman_provider_flutter/screens/cash_management/view/cash_payment_history_screen.dart';
 import 'package:handyman_provider_flutter/screens/extra_charges/add_extra_charges_screen.dart';
 import 'package:handyman_provider_flutter/screens/rating_view_all_screen.dart';
+import 'package:handyman_provider_flutter/screens/zoom_image_screen.dart';
 import 'package:handyman_provider_flutter/utils/colors.dart';
 import 'package:handyman_provider_flutter/utils/common.dart';
 import 'package:handyman_provider_flutter/utils/configs.dart';
@@ -1067,6 +1068,61 @@ class BookingDetailScreenState extends State<BookingDetailScreen> {
                   /// Service Proof Images
                   ServiceProofListWidget(
                       serviceProofList: res.data!.serviceProof!),
+
+                  if ((res.data?.bookingDetail?.attachments != null &&
+                      res.data!.bookingDetail!.attachments!.isNotEmpty))
+                    Text(
+                      'Attachments',
+                      style: boldTextStyle(
+                          size: LABEL_TEXT_SIZE,
+                          color: appStore.isDarkMode ? white : black),
+                    ).paddingOnly(left: 16, right: 16),
+                  if ((res.data?.bookingDetail?.attachments != null &&
+                      res.data!.bookingDetail!.attachments!.isNotEmpty))
+                    10.height,
+                  GridView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                    ),
+                    itemCount: res.data?.bookingDetail?.attachments?.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          if (res.data?.bookingDetail?.attachments?[index] !=
+                              null)
+                            ZoomImageScreen(galleryImages: [
+                              res.data?.bookingDetail?.attachments?[index] ??
+                                  'https://picsum.photos/200'
+                            ], index: 0)
+                                .launch(context);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(12),
+                            ),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(12),
+                            ),
+                            child: CachedImageWidget(
+                              url: res.data?.bookingDetail
+                                      ?.attachments?[index] ??
+                                  '',
+                              height: context.height(),
+                              fit: BoxFit.cover,
+                              placeHolderImage: 'assets/ic_launcher.png',
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ).paddingOnly(left: 16, right: 16),
 
                   /// About Handyman Card
                   if (res.data!.handymanData!.isNotEmpty &&

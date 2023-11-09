@@ -36,6 +36,7 @@ class BookingListResponse {
 }
 
 class BookingData {
+  List<String>? attachments;
   int? id;
   String? address;
   int? customerId;
@@ -110,6 +111,7 @@ class BookingData {
   num get totalExtraChargeAmount => extraCharges.validate().sumByDouble((e) => e.total.validate());
 
   BookingData({
+    this.attachments,
     this.address,
     this.imageAttachments,
     this.customerId,
@@ -159,6 +161,7 @@ class BookingData {
 
   factory BookingData.fromJson(Map<String, dynamic> json) {
     return BookingData(
+      attachments: json['attchment'] != null ? List<String>.from(json['attchment']) : null,
       address: json['address'],
       customerId: json['customer_id'],
       customerName: json['customer_name'],
@@ -236,6 +239,9 @@ class BookingData {
     //  data['attchments'] = this.image_attchments;
     if (this.imageAttachments != null) {
       data['service_attchments'] = this.imageAttachments;
+    }
+    if (this.attachments != null) {
+      data['attchment'] = this.attachments;
     }
     /* if (this.service_attchments != null) {
       data['service_attchments'] = this.service_attchments!.map((v) => v.toJson()).toList();
