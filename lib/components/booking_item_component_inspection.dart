@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:handyman_provider_flutter/components/cached_image_widget.dart';
 import 'package:handyman_provider_flutter/components/price_widget.dart';
-import 'package:handyman_provider_flutter/handyman/screen/inspection_screen.dart';
 import 'package:handyman_provider_flutter/main.dart';
 import 'package:handyman_provider_flutter/models/booking_list_response.dart';
 import 'package:handyman_provider_flutter/networks/rest_apis.dart';
@@ -16,25 +15,23 @@ import 'package:handyman_provider_flutter/utils/extensions/string_extension.dart
 import 'package:handyman_provider_flutter/utils/model_keys.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-class BookingItemComponent extends StatefulWidget {
+class BookingItemComponentInspection extends StatefulWidget {
   final String? status;
   final BookingData bookingData;
   final int? index;
   final bool showDescription;
-  final bool inspection;
 
-  BookingItemComponent(
+  BookingItemComponentInspection(
       {this.status,
       required this.bookingData,
       this.index,
-      this.showDescription = true,
-      this.inspection = false});
+      this.showDescription = true});
 
   @override
-  BookingItemComponentState createState() => BookingItemComponentState();
+  BookingItemComponentInspectionState createState() => BookingItemComponentInspectionState();
 }
 
-class BookingItemComponentState extends State<BookingItemComponent> {
+class BookingItemComponentInspectionState extends State<BookingItemComponentInspection> {
   @override
   void initState() {
     super.initState();
@@ -511,67 +508,8 @@ class BookingItemComponentState extends State<BookingItemComponent> {
       ), //booking card change
     ).onTap(
       () async {
-        if (widget.inspection) {
-          showDialog(
-            context: context,
-            useSafeArea: true,
-            builder: (context) => Center(
-              child: Container(
-                width: context.width() * 0.8,
-                height: context.height() * 0.2,
-                padding: EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: white,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(12),
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    6.height,
-                    Text(
-                      'Do you want to start the survey for D-5, Logix Infotech Park Noida?',
-                      style: primaryTextStyle(),
-                    ),
-                    20.height,
-                    Row(
-                      children: [
-                        Expanded(
-                          child: AppButton(
-                            child: Text('Decline',
-                                style: boldTextStyle(color: black, size: 12)),
-                            color: white,
-                            elevation: 1,
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ),
-                        12.width,
-                        Expanded(
-                          child: AppButton(
-                            child: Text('Start Inspection',
-                                style: boldTextStyle(color: white, size: 12)),
-                            color: primaryColor,
-                            elevation: 1,
-                            enableScaleAnimation: false,
-                            onTap: () {
-                              Navigator.pop(context);
-                              InspectionScreen().launch(context);
-                            },
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ),
-          );
-        } else {
-          BookingDetailScreen(bookingId: widget.bookingData.id.validate())
-              .launch(context);
-        }
+        BookingDetailScreen(bookingId: widget.bookingData.id.validate())
+            .launch(context);
       },
       hoverColor: Colors.transparent,
       highlightColor: Colors.transparent,

@@ -11,7 +11,12 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../utils/common.dart';
 
-Widget placeHolderWidget({String? placeHolderImage, double? height, double? width, BoxFit? fit, AlignmentGeometry? alignment}) {
+Widget placeHolderWidget(
+    {String? placeHolderImage,
+    double? height,
+    double? width,
+    BoxFit? fit,
+    AlignmentGeometry? alignment}) {
   return PlaceHolderWidget(
     height: height,
     width: width,
@@ -35,16 +40,22 @@ class LoaderWidget extends StatelessWidget {
   }
 }
 
-Widget aboutCustomerWidget({BuildContext? context, BookingData? bookingDetail}) {
+Widget aboutCustomerWidget(
+    {BuildContext? context, BookingData? bookingDetail}) {
   return Row(
     children: [
-      Text(languages.lblAboutCustomer, style: boldTextStyle(size: LABEL_TEXT_SIZE)).expand(),
+      Text(languages.lblAboutCustomer,
+              style: boldTextStyle(size: LABEL_TEXT_SIZE))
+          .expand(),
       if (bookingDetail!.canCustomerContact)
         Align(
           alignment: Alignment.topRight,
           child: AppButton(
-            child: Text(languages.lblGetDirection, style: boldTextStyle(color: primaryColor, size: 12)),
-            shapeBorder: RoundedRectangleBorder(borderRadius: radius(), side: BorderSide(color: context!.dividerColor)),
+            child: Text(languages.lblGetDirection,
+                style: boldTextStyle(color: primaryColor, size: 12)),
+            shapeBorder: RoundedRectangleBorder(
+                borderRadius: radius(),
+                side: BorderSide(color: context!.dividerColor)),
             padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
             elevation: 0,
             enableScaleAnimation: false,
@@ -52,12 +63,15 @@ Widget aboutCustomerWidget({BuildContext? context, BookingData? bookingDetail}) 
               if (isAndroid) {
                 final AndroidIntent intent = AndroidIntent(
                   action: 'action_view',
-                  data: 'google.navigation:q=${bookingDetail.address.validate()}',
+                  data:
+                      'google.navigation:q=${bookingDetail.address.validate()}',
                   package: 'package:com.google.android.apps.maps',
                 );
                 await intent.launch();
               } else {
-                commonLaunchUrl('$GOOGLE_MAP_PREFIX${Uri.encodeFull(bookingDetail.address.validate())}', launchMode: LaunchMode.externalApplication);
+                commonLaunchUrl(
+                    '$GOOGLE_MAP_PREFIX${Uri.encodeFull(bookingDetail.address.validate())}',
+                    launchMode: LaunchMode.externalApplication);
               }
             },
           ),

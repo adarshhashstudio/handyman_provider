@@ -8,6 +8,9 @@ import 'package:handyman_provider_flutter/main.dart';
 import 'package:handyman_provider_flutter/models/booking_list_response.dart';
 import 'package:handyman_provider_flutter/models/booking_status_response.dart';
 import 'package:handyman_provider_flutter/networks/rest_apis.dart';
+import 'package:handyman_provider_flutter/utils/colors.dart';
+import 'package:handyman_provider_flutter/utils/common.dart';
+import 'package:handyman_provider_flutter/utils/configs.dart';
 import 'package:handyman_provider_flutter/utils/constant.dart';
 import 'package:handyman_provider_flutter/utils/model_keys.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -24,7 +27,8 @@ class BookingFragment extends StatefulWidget {
   BookingFragmentState createState() => BookingFragmentState();
 }
 
-class BookingFragmentState extends State<BookingFragment> with SingleTickerProviderStateMixin {
+class BookingFragmentState extends State<BookingFragment>
+    with SingleTickerProviderStateMixin {
   ScrollController scrollController = ScrollController();
 
   int page = 1;
@@ -76,7 +80,8 @@ class BookingFragmentState extends State<BookingFragment> with SingleTickerProvi
 
   Future<void> fetchAllBookingList({bool loading = true}) async {
     appStore.setLoading(loading);
-    future = getBookingList(page, status: selectedValue, bookings: bookings, lastPageCallback: (b) {
+    future = getBookingList(page, status: selectedValue, bookings: bookings,
+        lastPageCallback: (b) {
       isLastPage = b;
     });
   }
@@ -95,10 +100,9 @@ class BookingFragmentState extends State<BookingFragment> with SingleTickerProvi
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
+  Widget servicesWidget() {
+    return Center(
+      child: Stack(
         children: [
           SnapHelperWidget<List<BookingData>>(
             initialData: cachedBookingList,
@@ -124,7 +128,8 @@ class BookingFragmentState extends State<BookingFragment> with SingleTickerProvi
                   subTitle: languages.noBookingSubTitle,
                   imageWidget: EmptyStateWidget(),
                 ),
-                itemBuilder: (_, index) => BookingItemComponent(bookingData: list[index], index: index),
+                itemBuilder: (_, index) => BookingItemComponent(
+                    bookingData: list[index], index: index),
                 //disposeScrollController: false,
                 onNextPage: () {
                   if (!isLastPage) {
@@ -165,12 +170,14 @@ class BookingFragmentState extends State<BookingFragment> with SingleTickerProvi
                 page = 1;
                 appStore.setLoading(true);
 
-                selectedValue = value.value.validate(value: BOOKING_PAYMENT_STATUS_ALL);
+                selectedValue =
+                    value.value.validate(value: BOOKING_PAYMENT_STATUS_ALL);
                 fetchAllBookingList(loading: true);
                 setState(() {});
 
                 if (bookings.isNotEmpty) {
-                  scrollController.animateTo(0, duration: 1.seconds, curve: Curves.easeOutQuart);
+                  scrollController.animateTo(0,
+                      duration: 1.seconds, curve: Curves.easeOutQuart);
                 } else {
                   scrollController = ScrollController();
                 }
@@ -181,5 +188,126 @@ class BookingFragmentState extends State<BookingFragment> with SingleTickerProvi
         ],
       ),
     );
+  }
+
+  Widget inspectionWidget() {
+    return Center(
+      child: Stack(
+        children: [
+          SnapHelperWidget<List<BookingData>>(
+            initialData: cachedBookingList,
+            future: future,
+            loadingWidget: BookingShimmer(),
+            onSuccess: (list) {
+              return AnimatedListView(
+                controller: scrollController,
+                onSwipeRefresh: () async {
+                  page = 1;
+                  await fetchAllBookingList(loading: true);
+                  setState(() {});
+                  return await 1.seconds.delay;
+                },
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                listAnimationType: ListAnimationType.FadeIn,
+                fadeInConfiguration: FadeInConfiguration(duration: 2.seconds),
+                itemCount: list.length,
+                shrinkWrap: true,
+                physics: AlwaysScrollableScrollPhysics(),
+                emptyWidget: NoDataWidget(
+                  title: languages.noBookingTitle,
+                  subTitle: languages.noBookingSubTitle,
+                  imageWidget: EmptyStateWidget(),
+                ),
+                itemBuilder: (_, index) => BookingItemComponent(
+                    bookingData: list[index], index: index, inspection: true),
+                //disposeScrollController: false,
+                onNextPage: () {
+                  if (!isLastPage) {
+                    page++;
+                    appStore.setLoading(true);
+
+                    fetchAllBookingList();
+                    setState(() {});
+                  }
+                },
+              ).paddingOnly(left: 0, right: 0, bottom: 0, top: 10);
+            },
+            errorBuilder: (error) {
+              return NoDataWidget(
+                title: error,
+                retryText: languages.reload,
+                imageWidget: ErrorStateWidget(),
+                onRetry: () {
+                  keyForStatus = UniqueKey();
+                  appStore.setLoading(true);
+                  page = 1;
+
+                  fetchAllBookingList();
+                  setState(() {});
+                },
+              );
+            },
+          ),
+          Observer(builder: (_) => LoaderWidget().visible(appStore.isLoading)),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return isUserTypeProvider
+        ? servicesWidget()
+        : DefaultTabController(
+            length: 2,
+            child: Scaffold(
+              appBar: AppBar(
+                title: PreferredSize(
+                  preferredSize:
+                      Size.fromHeight(AppBar().preferredSize.height) * 0.06,
+                  child: Container(
+                    height: context.height() * 0.07,
+                    padding: EdgeInsets.only(top: 10),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          10,
+                        ),
+                        color: secondaryPrimaryColor,
+                      ),
+                      child: TabBar(
+                        splashBorderRadius: BorderRadius.circular(10),
+                        labelColor: Colors.white,
+                        labelStyle: primaryTextStyle(),
+                        unselectedLabelColor: black,
+                        indicatorSize: TabBarIndicatorSize.tab,
+                        indicator: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            10,
+                          ),
+                          border: Border.all(color: transparentColor),
+                          color: primaryColor,
+                        ),
+                        tabs: const [
+                          Tab(
+                            text: 'Request',
+                          ),
+                          Tab(
+                            text: 'Inspection',
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              body: TabBarView(
+                children: [
+                  servicesWidget(),
+                  inspectionWidget(),
+                ],
+              ),
+            ),
+          );
   }
 }
