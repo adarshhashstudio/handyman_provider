@@ -111,12 +111,12 @@ class ProviderDashboardScreenState extends State<ProviderDashboardScreen> {
           textColor: Colors.white,
           showBack: false,
           actions: [
-            IconButton(
-              icon: chat.iconImage(color: white, size: 20),
-              onPressed: () async {
-                ChatListScreen().launch(context);
-              },
-            ),
+            // IconButton(
+            //   icon: chat.iconImage(color: white, size: 20),
+            //   onPressed: () async {
+            //     ChatListScreen().launch(context);
+            //   },
+            // ),
             IconButton(
               icon: Stack(
                 clipBehavior: Clip.none,

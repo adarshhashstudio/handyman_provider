@@ -95,7 +95,8 @@ class BookingFragmentState extends State<BookingFragment>
     appStore.setLoading(loading);
     var request = {'customer_id': appStore.uid};
     inspactionFuture = getInspectionList(inspectionPage, request,
-        status: selectedValue, bookings: inspectionBookings, lastPageCallback: (b) {
+        status: selectedValue,
+        bookings: inspectionBookings, lastPageCallback: (b) {
       isLastPageInspection = b;
     });
   }
@@ -123,6 +124,11 @@ class BookingFragmentState extends State<BookingFragment>
             future: future,
             loadingWidget: BookingShimmer(),
             onSuccess: (list) {
+              if (isUserTypeProvider) {
+                // Sort the list based on the date in descending order
+                list.sort((a, b) => DateTime.parse(b.date ?? '')
+                    .compareTo(DateTime.parse(a.date ?? '')));
+              }
               return AnimatedListView(
                 controller: scrollController,
                 onSwipeRefresh: () async {

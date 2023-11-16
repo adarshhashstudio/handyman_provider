@@ -20,7 +20,7 @@
         </intent>
     </queries>
    <application
-        android:label="K&amp;C Technician"
+        android:label="K&amp;C Trade"
         android:icon="@mipmap/ic_launcher"
        tools:replace="android:label">
         <activity

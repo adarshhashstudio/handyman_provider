@@ -124,12 +124,12 @@ class _HandymanDashboardScreenState extends State<HandymanDashboardScreen> {
               );
             },
           ),
-          IconButton(
-            icon: Image.asset(chat, height: 20, width: 20, color: white),
-            onPressed: () async {
-              ChatListScreen().launch(context);
-            },
-          ),
+          // IconButton(
+          //   icon: Image.asset(chat, height: 20, width: 20, color: white),
+          //   onPressed: () async {
+          //     ChatListScreen().launch(context);
+          //   },
+          // ),
         ],
       ),
       bottomNavigationBar: Blur(
