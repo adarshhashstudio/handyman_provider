@@ -32,14 +32,18 @@ class BookingFragmentState extends State<BookingFragment>
   ScrollController scrollController = ScrollController();
 
   int page = 1;
+  int inspectionPage = 1;
   List<BookingData> bookings = [];
+  List<BookingData> inspectionBookings = [];
 
   String selectedValue = BOOKING_PAYMENT_STATUS_ALL;
   bool isLastPage = false;
+  bool isLastPageInspection = false;
   bool hasError = false;
   bool isApiCalled = false;
 
   Future<List<BookingData>>? future;
+  Future<List<BookingData>>? inspactionFuture;
   UniqueKey keyForStatus = UniqueKey();
 
   @override
@@ -76,6 +80,7 @@ class BookingFragmentState extends State<BookingFragment>
     }
 
     fetchAllBookingList(loading: true);
+    fetchInspectionList(loading: true);
   }
 
   Future<void> fetchAllBookingList({bool loading = true}) async {
@@ -83,6 +88,15 @@ class BookingFragmentState extends State<BookingFragment>
     future = getBookingList(page, status: selectedValue, bookings: bookings,
         lastPageCallback: (b) {
       isLastPage = b;
+    });
+  }
+
+  Future<void> fetchInspectionList({bool loading = true}) async {
+    appStore.setLoading(loading);
+    var request = {'customer_id': appStore.uid};
+    inspactionFuture = getInspectionList(inspectionPage, request,
+        status: selectedValue, bookings: inspectionBookings, lastPageCallback: (b) {
+      isLastPageInspection = b;
     });
   }
 
@@ -191,72 +205,72 @@ class BookingFragmentState extends State<BookingFragment>
   }
 
   Widget inspectionWidget() {
-    return Center(
-      child: Stack(
-        children: [
-          SnapHelperWidget<List<BookingData>>(
-            initialData: cachedBookingList,
-            future: future,
-            loadingWidget: BookingShimmer(),
-            onSuccess: (list) {
-              return AnimatedListView(
-                controller: scrollController,
-                onSwipeRefresh: () async {
-                  page = 1;
-                  await fetchAllBookingList(loading: true);
-                  setState(() {});
-                  return await 1.seconds.delay;
-                },
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                listAnimationType: ListAnimationType.FadeIn,
-                fadeInConfiguration: FadeInConfiguration(duration: 2.seconds),
-                itemCount: list.length,
-                shrinkWrap: true,
-                physics: AlwaysScrollableScrollPhysics(),
-                emptyWidget: NoDataWidget(
-                  title: languages.noBookingTitle,
-                  subTitle: languages.noBookingSubTitle,
-                  imageWidget: EmptyStateWidget(),
-                ),
-                itemBuilder: (_, index) => BookingItemComponent(
-                    bookingData: list[index], index: index, inspection: true),
-                //disposeScrollController: false,
-                onNextPage: () {
-                  if (!isLastPage) {
-                    page++;
-                    appStore.setLoading(true);
-
-                    fetchAllBookingList();
-                    setState(() {});
-                  }
-                },
-              ).paddingOnly(left: 0, right: 0, bottom: 0, top: 10);
-            },
-            errorBuilder: (error) {
-              return NoDataWidget(
-                title: error,
-                retryText: languages.reload,
-                imageWidget: ErrorStateWidget(),
-                onRetry: () {
-                  keyForStatus = UniqueKey();
+    return Stack(
+      children: [
+        SnapHelperWidget<List<BookingData>>(
+          initialData: cachedBookingListInspection,
+          future: inspactionFuture,
+          loadingWidget: BookingShimmer(),
+          onSuccess: (inspectionList) {
+            return AnimatedListView(
+              controller: scrollController,
+              onSwipeRefresh: () async {
+                inspectionPage = 1;
+                await fetchInspectionList(loading: true);
+                setState(() {});
+                return await 1.seconds.delay;
+              },
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              listAnimationType: ListAnimationType.FadeIn,
+              fadeInConfiguration: FadeInConfiguration(duration: 2.seconds),
+              itemCount: inspectionList.length,
+              shrinkWrap: true,
+              physics: AlwaysScrollableScrollPhysics(),
+              emptyWidget: NoDataWidget(
+                title: languages.noBookingTitle,
+                subTitle: languages.noBookingSubTitle,
+                imageWidget: EmptyStateWidget(),
+              ),
+              itemBuilder: (_, index) => BookingItemComponent(
+                  bookingData: inspectionList[index],
+                  index: index,
+                  inspection: true),
+              //disposeScrollController: false,
+              onNextPage: () {
+                if (!isLastPageInspection) {
+                  inspectionPage++;
                   appStore.setLoading(true);
-                  page = 1;
 
-                  fetchAllBookingList();
+                  fetchInspectionList();
                   setState(() {});
-                },
-              );
-            },
-          ),
-          Observer(builder: (_) => LoaderWidget().visible(appStore.isLoading)),
-        ],
-      ),
+                }
+              },
+            ).paddingOnly(left: 0, right: 0, bottom: 0, top: 10);
+          },
+          errorBuilder: (error) {
+            return NoDataWidget(
+              title: error,
+              retryText: languages.reload,
+              imageWidget: ErrorStateWidget(),
+              onRetry: () {
+                keyForStatus = UniqueKey();
+                appStore.setLoading(true);
+                inspectionPage = 1;
+
+                fetchInspectionList();
+                setState(() {});
+              },
+            );
+          },
+        ),
+        Observer(builder: (_) => LoaderWidget().visible(appStore.isLoading)),
+      ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return isUserTypeProvider
+    return isUserTypeHandyman
         ? servicesWidget()
         : DefaultTabController(
             length: 2,

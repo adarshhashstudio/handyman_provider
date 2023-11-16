@@ -62,6 +62,7 @@ List<AddExtraChargesModel> chargesList = [];
 DashboardResponse? cachedProviderDashboardResponse;
 HandymanDashBoardResponse? cachedHandymanDashboardResponse;
 List<BookingData>? cachedBookingList;
+List<BookingData>? cachedBookingListInspection;
 List<PaymentData>? cachedPaymentList;
 List<NotificationData>? cachedNotifications;
 List<BookingStatusResponse>? cachedBookingStatusDropdown;

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:handyman_provider_flutter/components/back_widget.dart';
+import 'package:handyman_provider_flutter/handyman/screen/area_details_screen.dart';
 import 'package:handyman_provider_flutter/handyman/screen/inspection_add_area.dart';
 import 'package:handyman_provider_flutter/handyman/screen/inspection_add_item.dart';
+import 'package:handyman_provider_flutter/handyman/screen/item_details_screen.dart';
 import 'package:handyman_provider_flutter/utils/colors.dart';
 import 'package:handyman_provider_flutter/utils/configs.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -38,7 +40,7 @@ class _InspectionScreenState extends State<InspectionScreen> {
             'https://picsum.photos/id/232/200/300'
           ]),
       AddedArea(
-          name: 'Drawing Room',
+          name: 'Bed Room',
           size: 1200,
           description:
               'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable.',
@@ -47,7 +49,7 @@ class _InspectionScreenState extends State<InspectionScreen> {
             'https://picsum.photos/id/17/200/300',
           ]),
       AddedArea(
-          name: 'Drawing Room',
+          name: 'Bath Room',
           size: 1200,
           description:
               'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable.',
@@ -236,7 +238,11 @@ class _InspectionScreenState extends State<InspectionScreen> {
             )
         ],
       ),
-    ).onTap(() {});
+    ).onTap(() {
+      AreaDetailsScreen(
+        areaDetails: areaList[index],
+      ).launch(context);
+    });
   }
 
   Widget itemListItem(int index, List<AddedArea> itemList) {
@@ -263,7 +269,11 @@ class _InspectionScreenState extends State<InspectionScreen> {
           ),
         ],
       ),
-    ).onTap(() {});
+    ).onTap(() {
+      ItemDetailsScreen(
+        item: itemsList[index],
+      ).launch(context);
+    });
   }
 
   @override
