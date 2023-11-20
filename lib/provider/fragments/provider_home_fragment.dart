@@ -47,9 +47,12 @@ class _ProviderHomeFragmentState extends State<ProviderHomeFragment> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         16.height,
-        Text("${languages.lblHello}, ${appStore.userFullName}", style: boldTextStyle(size: 16)).paddingLeft(16),
+        Text("${languages.lblHello}, ${appStore.userFullName}",
+                style: boldTextStyle(size: 16))
+            .paddingLeft(16),
         8.height,
-        Text(languages.lblWelcomeBack, style: secondaryTextStyle(size: 14)).paddingLeft(16),
+        Text(languages.lblWelcomeBack, style: secondaryTextStyle(size: 14))
+            .paddingLeft(16),
         16.height,
       ],
     );
@@ -58,7 +61,8 @@ class _ProviderHomeFragmentState extends State<ProviderHomeFragment> {
   Widget planBanner(DashboardResponse data) {
     if (data.isPlanExpired.validate()) {
       return subSubscriptionPlanWidget(
-        planBgColor: appStore.isDarkMode ? context.cardColor : Colors.red.shade50,
+        planBgColor:
+            appStore.isDarkMode ? context.cardColor : Colors.red.shade50,
         planTitle: languages.lblPlanExpired,
         planSubtitle: languages.lblPlanSubTitle,
         planButtonTxt: languages.btnTxtBuyNow,
@@ -69,7 +73,8 @@ class _ProviderHomeFragmentState extends State<ProviderHomeFragment> {
       );
     } else if (data.userNeverPurchasedPlan.validate()) {
       return subSubscriptionPlanWidget(
-        planBgColor: appStore.isDarkMode ? context.cardColor : Colors.red.shade50,
+        planBgColor:
+            appStore.isDarkMode ? context.cardColor : Colors.red.shade50,
         planTitle: languages.lblChooseYourPlan,
         planSubtitle: languages.lblRenewSubTitle,
         planButtonTxt: languages.btnTxtBuyNow,
@@ -83,7 +88,8 @@ class _ProviderHomeFragmentState extends State<ProviderHomeFragment> {
 
       if (days != 0 && days <= PLAN_REMAINING_DAYS) {
         return subSubscriptionPlanWidget(
-          planBgColor: appStore.isDarkMode ? context.cardColor : Colors.orange.shade50,
+          planBgColor:
+              appStore.isDarkMode ? context.cardColor : Colors.orange.shade50,
           planTitle: languages.lblReminder,
           planSubtitle: languages.planAboutToExpire(days),
           planButtonTxt: languages.lblRenew,
@@ -122,16 +128,24 @@ class _ProviderHomeFragmentState extends State<ProviderHomeFragment> {
                   listAnimationType: ListAnimationType.FadeIn,
                   fadeInConfiguration: FadeInConfiguration(duration: 2.seconds),
                   children: [
-                    if ((snap.data!.earningType == EARNING_TYPE_SUBSCRIPTION)) planBanner(snap.data!),
+                    if ((snap.data!.earningType == EARNING_TYPE_SUBSCRIPTION))
+                      planBanner(snap.data!),
                     _buildHeaderWidget(snap.data!),
-                    TodayCashComponent(todayCashAmount: snap.data!.todayCashAmount.validate()),
+                    TodayCashComponent(
+                        todayCashAmount: snap.data!.todayCashAmount.validate()),
                     TotalComponent(snap: snap.data!),
-                    ChartComponent(),
-                    HandymanRecentlyOnlineComponent(images: snap.data!.onlineHandyman.validate()),
+                    Visibility(visible: false, child: ChartComponent()),
+                    HandymanRecentlyOnlineComponent(
+                        images: snap.data!.onlineHandyman.validate()),
                     HandymanListComponent(list: snap.data!.handyman.validate()),
-                    UpcomingBookingComponent(bookingData: snap.data!.upcomingBookings.validate()),
-                    JobListComponent(list: snap.data!.myPostJobData.validate()).paddingOnly(left: 16, right: 16, top: 8),
-                    ServiceListComponent(list: snap.data!.service.validate()),
+                    UpcomingBookingComponent(
+                        bookingData: snap.data!.upcomingBookings.validate()),
+                    JobListComponent(list: snap.data!.myPostJobData.validate())
+                        .paddingOnly(left: 16, right: 16, top: 8),
+                    Visibility(
+                        visible: false,
+                        child: ServiceListComponent(
+                            list: snap.data!.service.validate())),
                   ],
                   onSwipeRefresh: () async {
                     page = 1;
@@ -165,7 +179,8 @@ class _ProviderHomeFragmentState extends State<ProviderHomeFragment> {
               );
             },
           ),
-          Observer(builder: (context) => LoaderWidget().visible(appStore.isLoading))
+          Observer(
+              builder: (context) => LoaderWidget().visible(appStore.isLoading))
         ],
       ),
     );

@@ -20,8 +20,9 @@ import '../components/empty_error_state_widget.dart';
 // ignore: must_be_immutable
 class BookingFragment extends StatefulWidget {
   String? statusType;
+  bool isRequests;
 
-  BookingFragment({this.statusType});
+  BookingFragment({this.statusType, required this.isRequests});
 
   @override
   BookingFragmentState createState() => BookingFragmentState();
@@ -75,12 +76,16 @@ class BookingFragmentState extends State<BookingFragment>
   }
 
   void init() async {
+    appStore.setLoading(false);
     if (widget.statusType.validate().isNotEmpty) {
       selectedValue = widget.statusType.validate();
     }
 
-    fetchAllBookingList(loading: true);
-    fetchInspectionList(loading: true);
+    if (widget.isRequests) {
+      fetchAllBookingList(loading: true);
+    } else {
+      fetchInspectionList(loading: true);
+    }
   }
 
   Future<void> fetchAllBookingList({bool loading = true}) async {
@@ -89,6 +94,7 @@ class BookingFragmentState extends State<BookingFragment>
         lastPageCallback: (b) {
       isLastPage = b;
     });
+    appStore.setLoading(false);
   }
 
   Future<void> fetchInspectionList({bool loading = true}) async {
@@ -99,6 +105,7 @@ class BookingFragmentState extends State<BookingFragment>
         bookings: inspectionBookings, lastPageCallback: (b) {
       isLastPageInspection = b;
     });
+    appStore.setLoading(false);
   }
 
   @override
@@ -278,56 +285,8 @@ class BookingFragmentState extends State<BookingFragment>
   Widget build(BuildContext context) {
     return isUserTypeHandyman
         ? servicesWidget()
-        : DefaultTabController(
-            length: 2,
-            child: Scaffold(
-              appBar: AppBar(
-                title: PreferredSize(
-                  preferredSize:
-                      Size.fromHeight(AppBar().preferredSize.height) * 0.06,
-                  child: Container(
-                    height: context.height() * 0.07,
-                    padding: EdgeInsets.only(top: 10),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          10,
-                        ),
-                        color: secondaryPrimaryColor,
-                      ),
-                      child: TabBar(
-                        splashBorderRadius: BorderRadius.circular(10),
-                        labelColor: Colors.white,
-                        labelStyle: primaryTextStyle(),
-                        unselectedLabelColor: black,
-                        indicatorSize: TabBarIndicatorSize.tab,
-                        indicator: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                            10,
-                          ),
-                          border: Border.all(color: transparentColor),
-                          color: primaryColor,
-                        ),
-                        tabs: const [
-                          Tab(
-                            text: 'Request',
-                          ),
-                          Tab(
-                            text: 'Inspection',
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              body: TabBarView(
-                children: [
-                  servicesWidget(),
-                  inspectionWidget(),
-                ],
-              ),
-            ),
-          );
+        : widget.isRequests
+            ? servicesWidget()
+            : inspectionWidget();
   }
 }

@@ -33,7 +33,7 @@ class _HandymanDashboardScreenState extends State<HandymanDashboardScreen> {
 
   List<Widget> fragmentList = [
     HandymanHomeFragment(),
-    BookingFragment(),
+    BookingFragment(isRequests: true,),
     NotificationFragment(),
     HandymanProfileFragment(),
   ];

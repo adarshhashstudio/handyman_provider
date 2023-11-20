@@ -29,8 +29,43 @@ class _InspectionAddItemState extends State<InspectionAddItem> {
   List<SampleAreaNameResponse> areaNameList = [
     SampleAreaNameResponse(
       name: 'Drawing Room',
-    )
+      id: 1,
+    ),
+    SampleAreaNameResponse(
+      name: 'Bed Room',
+      id: 2,
+    ),
+    SampleAreaNameResponse(
+      name: 'Lobby',
+      id: 3,
+    ),
+    SampleAreaNameResponse(
+      name: 'Kitchen',
+      id: 4,
+    ),
   ];
+
+  SampleAreaNameResponse? selectedItem;
+  int? selectedItemId;
+  List<SampleAreaNameResponse> itemNameList = [
+    SampleAreaNameResponse(
+      name: 'Fridge',
+      id: 1,
+    ),
+    SampleAreaNameResponse(
+      name: 'AC',
+      id: 2,
+    ),
+    SampleAreaNameResponse(
+      name: 'Sofa',
+      id: 3,
+    ),
+    SampleAreaNameResponse(
+      name: 'Bed',
+      id: 4,
+    ),
+  ];
+
   List<File> imageFiles = [];
   List<Attachments> tempAttachments = [];
   bool isUpdate = false;
@@ -59,7 +94,7 @@ class _InspectionAddItemState extends State<InspectionAddItem> {
         child: Column(
           children: [
             DropdownButtonFormField<SampleAreaNameResponse>(
-              decoration: inputDecoration(context, hint: 'Area Item'),
+              decoration: inputDecoration(context, hint: 'Area Name'),
               style: primaryTextStyle(color: primaryColor),
               isExpanded: true,
               dropdownColor: context.cardColor,
@@ -68,7 +103,7 @@ class _InspectionAddItemState extends State<InspectionAddItem> {
               items: areaNameList.map((SampleAreaNameResponse e) {
                 return DropdownMenuItem<SampleAreaNameResponse>(
                   value: e,
-                  child: Text(e.name!,
+                  child: Text(e.name ?? '',
                       style: primaryTextStyle(),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis),
@@ -76,6 +111,28 @@ class _InspectionAddItemState extends State<InspectionAddItem> {
               }).toList(),
               onChanged: (SampleAreaNameResponse? value) async {
                 selectedAreaId = value?.id ?? 0;
+                setState(() {});
+              },
+            ),
+            16.height,
+            DropdownButtonFormField<SampleAreaNameResponse>(
+              decoration: inputDecoration(context, hint: 'Items'),
+              style: primaryTextStyle(color: primaryColor),
+              isExpanded: true,
+              dropdownColor: context.cardColor,
+              menuMaxHeight: 300,
+              value: selectedItem,
+              items: itemNameList.map((SampleAreaNameResponse e) {
+                return DropdownMenuItem<SampleAreaNameResponse>(
+                  value: e,
+                  child: Text(e.name ?? '',
+                      style: primaryTextStyle(),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis),
+                );
+              }).toList(),
+              onChanged: (SampleAreaNameResponse? value) async {
+                selectedItemId = value?.id ?? 0;
                 setState(() {});
               },
             ),
@@ -132,7 +189,7 @@ class _InspectionAddItemState extends State<InspectionAddItem> {
             ),
             16.height,
             AppButton(
-              text: languages.lblSubmit,
+              text: 'Save',
               width: context.width(),
               color: primaryColor,
               onTap: () {},

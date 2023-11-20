@@ -34,8 +34,9 @@ class ProviderDashboardScreenState extends State<ProviderDashboardScreen> {
 
   List<Widget> fragmentList = [
     ProviderHomeFragment(),
-    BookingFragment(),
-    ProviderPaymentFragment(),
+    BookingFragment(isRequests: true,),
+    BookingFragment(isRequests: false,),
+    // ProviderPaymentFragment(),
     ProviderProfileFragment(),
   ];
 
@@ -104,7 +105,8 @@ class ProviderDashboardScreenState extends State<ProviderDashboardScreen> {
           [
             'K&C Services',
             'Service Requests',
-            languages.lblPayment,
+            'Inspections',
+            // languages.lblPayment,
             languages.lblProfile,
           ][currentIndex],
           color: primaryColor,
@@ -151,7 +153,11 @@ class ProviderDashboardScreenState extends State<ProviderDashboardScreen> {
             ),
           ],
         ),
-        body: fragmentList[currentIndex],
+        body: PageStorage(
+  key: PageStorageKey<String>('page${currentIndex}'),
+  bucket: PageStorageBucket(),
+  child: fragmentList[currentIndex],
+),
         bottomNavigationBar: Blur(
           blur: 30,
           borderRadius: radius(0),
@@ -180,11 +186,17 @@ class ProviderDashboardScreenState extends State<ProviderDashboardScreen> {
                   label: 'Requests',
                 ),
                 NavigationDestination(
-                  icon: un_fill_wallet.iconImage(color: appTextSecondaryColor),
+                  icon: total_booking.iconImage(color: appTextSecondaryColor),
                   selectedIcon:
-                      ic_fill_wallet.iconImage(color: context.primaryColor),
-                  label: languages.lblPayment,
+                      total_booking.iconImage(color: context.primaryColor),
+                  label: 'Inspections',
                 ),
+                // NavigationDestination(
+                //   icon: un_fill_wallet.iconImage(color: appTextSecondaryColor),
+                //   selectedIcon:
+                //       ic_fill_wallet.iconImage(color: context.primaryColor),
+                //   label: languages.lblPayment,
+                // ),
                 NavigationDestination(
                   icon: profile.iconImage(color: appTextSecondaryColor),
                   selectedIcon:

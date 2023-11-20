@@ -21,7 +21,8 @@ class InspectionScreen extends StatefulWidget {
 
 class _InspectionScreenState extends State<InspectionScreen> {
   List<CategoryData> staticList = [
-    CategoryData(name: 'Add Area', categoryImage: 'assets/images/plan.png')
+    CategoryData(name: 'Add Area', categoryImage: 'assets/images/add_area.png'),
+    CategoryData(name: 'Add Item', categoryImage: 'assets/images/add_items.png')
   ];
 
   List<AddedArea> areaList = [];
@@ -75,7 +76,7 @@ class _InspectionScreenState extends State<InspectionScreen> {
     ),
   ];
 
-  Widget inspectionItem({String? image, String? name, Color? textColor}) {
+  Widget inspectionItem({String? image, String? name}) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
@@ -85,19 +86,20 @@ class _InspectionScreenState extends State<InspectionScreen> {
       child: Center(
         child: Column(
           children: [
+            4.height,
             Container(
-              width: context.width() * 0.3,
-              height: context.height() * 0.15,
+              width: context.width() * 0.27,
+              height: context.height() * 0.13,
               child: Image.asset(
                 image ?? '',
                 fit: BoxFit.cover,
               ),
             ),
-            6.height,
+            8.height,
             Text(
               name ?? '',
               style: primaryTextStyle(
-                  weight: FontWeight.bold, color: textColor ?? primaryColor),
+                  size: 18, weight: FontWeight.bold, color: black),
             )
           ],
         ),
@@ -107,30 +109,24 @@ class _InspectionScreenState extends State<InspectionScreen> {
 
   Widget gridViewItems() {
     return GridView.builder(
-      itemCount: staticList.length + 1,
-      physics: AlwaysScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        mainAxisSpacing: 20,
-        crossAxisSpacing: 20,
-      ),
-      itemBuilder: (context, index) => (index < staticList.length)
-          ? inspectionItem(
-                  image: staticList[index].categoryImage.toString(),
-                  name: staticList[index].name.toString())
-              .onTap(() {
-              InspectionAddArea().launch(context);
+        itemCount: staticList.length,
+        physics: AlwaysScrollableScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 20,
+          crossAxisSpacing: 20,
+        ),
+        itemBuilder: (context, index) => inspectionItem(
+                    image: staticList[index].categoryImage.toString(),
+                    name: staticList[index].name.toString())
+                .onTap(() {
+              if (staticList[index].name == 'Add Item') {
+                InspectionAddItem().launch(context);
+              } else {
+                InspectionAddArea().launch(context);
+              }
               addAreaListData();
-            })
-          : inspectionItem(
-              image: 'assets/images/home-appliance.png',
-              name: 'Add Item',
-              textColor: black,
-            ).onTap(() {
-              InspectionAddItem().launch(context);
-              addAreaListData();
-            }),
-    );
+            }));
   }
 
   Widget listViewItems() {
@@ -140,33 +136,112 @@ class _InspectionScreenState extends State<InspectionScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Area',
-            style: primaryTextStyle(color: gray, weight: FontWeight.bold),
+          Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Last Inspected on',
+                    style: primaryTextStyle(
+                        size: 10, weight: FontWeight.w500, color: gray),
+                  ),
+                  Spacer(),
+                  Text(
+                    'Project Manager',
+                    style: primaryTextStyle(
+                        size: 10, weight: FontWeight.w500, color: gray),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '16-11-2023',
+                    style: primaryTextStyle(
+                        size: 14,
+                        weight: FontWeight.w500,
+                        color: black,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  Spacer(),
+                  Text(
+                    'Vimal Mittal',
+                    style: primaryTextStyle(
+                        size: 14,
+                        weight: FontWeight.w500,
+                        color: black,
+                        fontStyle: FontStyle.italic),
+                  ),
+                ],
+              ),
+            ],
           ),
-          12.height,
-          AnimatedListView(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: areaList.length,
-              itemBuilder: (context, index) {
-                return areaListItem(index, areaList).paddingOnly(bottom: 12);
-              }),
-          20.height,
-          Text(
-            'Item',
-            style: primaryTextStyle(color: gray, weight: FontWeight.bold),
+          16.height,
+          ExpansionPanelList(
+            expandIconColor: black,
+            expansionCallback: (panelIndex, isExpanded) {},
+            children: [
+              ExpansionPanel(
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                canTapOnHeader: true,
+                headerBuilder: (context, isExpanded) {
+                  return Container(
+                    padding: EdgeInsets.only(left: 10, right: 10),
+                    width: context.width() * 0.1,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: cardColor),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Floor Level No 1',
+                        style: primaryTextStyle(size: 14, color: black),
+                      ),
+                    ),
+                  );
+                },
+                isExpanded: true,
+                body: expansionBody(),
+              )
+            ],
           ),
-          12.height,
-          AnimatedListView(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: itemsList.length,
-              itemBuilder: (context, index) {
-                return itemListItem(index, itemsList).paddingOnly(bottom: 12);
-              }),
         ],
       ),
+    );
+  }
+
+  Widget expansionBody() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Area',
+          style: primaryTextStyle(color: gray, weight: FontWeight.bold),
+        ),
+        12.height,
+        AnimatedListView(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: areaList.length,
+            itemBuilder: (context, index) {
+              return areaListItem(index, areaList).paddingOnly(bottom: 12);
+            }),
+        20.height,
+        Text(
+          'Item',
+          style: primaryTextStyle(color: gray, weight: FontWeight.bold),
+        ),
+        12.height,
+        AnimatedListView(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: itemsList.length,
+            itemBuilder: (context, index) {
+              return itemListItem(index, itemsList).paddingOnly(bottom: 12);
+            }),
+      ],
     );
   }
 

@@ -272,25 +272,27 @@ class BookingItemComponentState extends State<BookingItemComponent> {
               //decoration: cardDecoration(context),
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(languages.lblAddress, style: secondaryTextStyle()),
-                      8.width,
-                      Marquee(
-                        child: Text(
-                          widget.bookingData.address != null
-                              ? widget.bookingData.address.validate()
-                              : languages.notAvailable,
-                          style: boldTextStyle(size: 12),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.right,
-                        ),
-                      ).flexible(),
-                    ],
-                  ).paddingAll(8),
-                  Divider(height: 0, color: context.dividerColor),
+                  if (!widget.inspection)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(languages.lblAddress, style: secondaryTextStyle()),
+                        8.width,
+                        Marquee(
+                          child: Text(
+                            widget.bookingData.address != null
+                                ? widget.bookingData.address.validate()
+                                : languages.notAvailable,
+                            style: boldTextStyle(size: 12),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.right,
+                          ),
+                        ).flexible(),
+                      ],
+                    ).paddingAll(8),
+                  if (!widget.inspection)
+                    Divider(height: 0, color: context.dividerColor),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -306,6 +308,47 @@ class BookingItemComponentState extends State<BookingItemComponent> {
                       ).expand(),
                     ],
                   ).paddingAll(8),
+                  if (widget.inspection)
+                    Divider(height: 0, color: context.dividerColor),
+                  if (widget.inspection)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(languages.lblAddress,
+                                style: secondaryTextStyle()),
+                            2.height,
+                            Row(
+                              children: [
+                                Image.asset(
+                                  'assets/icons/ic_placeholder.png',
+                                  width: 14,
+                                  height: 14,
+                                ),
+                                Text('Locate Me',
+                                    style: secondaryTextStyle(
+                                        color: redColor,
+                                        size: 11,
+                                        fontStyle: FontStyle.italic,
+                                        weight: FontWeight.w500)),
+                              ],
+                            ),
+                          ],
+                        ),
+                        8.width,
+                        Text(
+                          widget.bookingData.address != null
+                              ? widget.bookingData.address.validate()
+                              : languages.notAvailable,
+                          style: boldTextStyle(size: 12),
+                          maxLines: 2,
+                          // overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.right,
+                        ).flexible(),
+                      ],
+                    ).paddingAll(8),
                   if (widget.bookingData.customerName.validate().isNotEmpty)
                     Column(
                       children: [
@@ -529,10 +572,16 @@ class BookingItemComponentState extends State<BookingItemComponent> {
                 child: Column(
                   children: [
                     6.height,
-                    Text(
-                      'Do you want to start the survey for D-5, Logix Infotech Park Noida?',
-                      style: primaryTextStyle(),
-                    ),
+                    Text.rich(TextSpan(
+                        text: 'Do you want to start the survey for ',
+                        style: primaryTextStyle(),
+                        children: [
+                          TextSpan(
+                            text:
+                                '${widget.bookingData.address ?? 'Not Available'}?',
+                            style: primaryTextStyle(weight: FontWeight.bold),
+                          ),
+                        ])),
                     20.height,
                     Row(
                       children: [

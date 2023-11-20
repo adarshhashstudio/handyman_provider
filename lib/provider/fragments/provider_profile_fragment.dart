@@ -85,7 +85,9 @@ class ProviderProfileFragmentState extends State<ProviderProfileFragment> {
                           ),
                           child: Container(
                             decoration: boxDecorationDefault(
-                              border: Border.all(color: context.scaffoldBackgroundColor, width: 4),
+                              border: Border.all(
+                                  color: context.scaffoldBackgroundColor,
+                                  width: 4),
                               shape: BoxShape.circle,
                             ),
                             child: CachedImageWidget(
@@ -105,11 +107,13 @@ class ProviderProfileFragmentState extends State<ProviderProfileFragment> {
                             decoration: boxDecorationDefault(
                               shape: BoxShape.circle,
                               color: primaryColor,
-                              border: Border.all(color: context.cardColor, width: 2),
+                              border: Border.all(
+                                  color: context.cardColor, width: 2),
                             ),
                             child: Icon(AntDesign.edit, color: white, size: 18),
                           ).onTap(() {
-                            EditProfileScreen().launch(context, pageRouteAnimation: PageRouteAnimation.Fade);
+                            EditProfileScreen().launch(context,
+                                pageRouteAnimation: PageRouteAnimation.Fade);
                           }),
                         ),
                       ],
@@ -128,171 +132,394 @@ class ProviderProfileFragmentState extends State<ProviderProfileFragment> {
                   ),
                 ],
               ).center().visible(appStore.isLoggedIn),
-              if (appStore.earningTypeSubscription && appStore.isPlanSubscribe)
-                Column(
-                  children: [
-                    32.height,
-                    Container(
-                      decoration: boxDecorationWithRoundedCorners(
-                        borderRadius: BorderRadius.all(Radius.circular(16)),
-                        backgroundColor: appStore.isDarkMode ? cardDarkColor : primaryColor.withOpacity(0.1),
-                      ),
-                      padding: EdgeInsets.all(16),
-                      margin: EdgeInsets.symmetric(horizontal: 16),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(languages.lblCurrentPlan, style: secondaryTextStyle(color: appStore.isDarkMode ? white : appTextSecondaryColor)),
-                              Text(languages.lblValidTill, style: secondaryTextStyle(color: appStore.isDarkMode ? white : appTextSecondaryColor)),
-                            ],
-                          ),
-                          16.height,
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(appStore.planTitle.validate().capitalizeFirstLetter(), style: boldTextStyle()),
-                              Text(
-                                formatDate(appStore.planEndDate.validate(), format: DATE_FORMAT_2),
-                                style: boldTextStyle(color: primaryColor),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+              // if (appStore.earningTypeSubscription && appStore.isPlanSubscribe)
+              // Column(
+              //   children: [
+              //     32.height,
+              //     Container(
+              //       decoration: boxDecorationWithRoundedCorners(
+              //         borderRadius: BorderRadius.all(Radius.circular(16)),
+              //         backgroundColor: appStore.isDarkMode
+              //             ? cardDarkColor
+              //             : primaryColor.withOpacity(0.1),
+              //       ),
+              //       padding: EdgeInsets.all(16),
+              //       margin: EdgeInsets.symmetric(horizontal: 16),
+              //       child: Column(
+              //         children: [
+              //           Row(
+              //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //             children: [
+              //               Text(languages.lblCurrentPlan,
+              //                   style: secondaryTextStyle(
+              //                       color: appStore.isDarkMode
+              //                           ? white
+              //                           : appTextSecondaryColor)),
+              //               Text(languages.lblValidTill,
+              //                   style: secondaryTextStyle(
+              //                       color: appStore.isDarkMode
+              //                           ? white
+              //                           : appTextSecondaryColor)),
+              //             ],
+              //           ),
+              //           16.height,
+              //           Row(
+              //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //             children: [
+              //               Text(
+              //                   appStore.planTitle
+              //                       .validate()
+              //                       .capitalizeFirstLetter(),
+              //                   style: boldTextStyle()),
+              //               Text(
+              //                 formatDate(appStore.planEndDate.validate(),
+              //                     format: DATE_FORMAT_2),
+              //                 style: boldTextStyle(color: primaryColor),
+              //               ),
+              //             ],
+              //           )
+              //         ],
+              //       ),
+              //     ),
+              //   ],
+              // ),
               16.height,
-              if (getStringAsync(DASHBOARD_COMMISSION).validate().isNotEmpty) ...[
-                CommissionComponent(
-                  commission: Commission.fromJson(jsonDecode(getStringAsync(DASHBOARD_COMMISSION))),
-                ),
-                16.height,
-              ],
+              // if (getStringAsync(DASHBOARD_COMMISSION)
+              //     .validate()
+              //     .isNotEmpty) ...[
+              //   CommissionComponent(
+              //     commission: Commission.fromJson(
+              //         jsonDecode(getStringAsync(DASHBOARD_COMMISSION))),
+              //   ),
+              //   16.height,
+              // ],
               Container(
                 decoration: boxDecorationWithRoundedCorners(
-                  borderRadius: BorderRadius.only(topRight: Radius.circular(32), topLeft: Radius.circular(32)),
-                  backgroundColor: appStore.isDarkMode ? cardDarkColor : cardColor,
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(32),
+                      topLeft: Radius.circular(32)),
+                  backgroundColor:
+                      appStore.isDarkMode ? cardDarkColor : cardColor,
                 ),
                 child: Column(
                   children: [
                     16.height,
                     if (appStore.earningTypeSubscription)
+                      if (isUserTypeHandyman)
+                        SettingItemWidget(
+                          leading: Image.asset(services,
+                              height: 16,
+                              width: 16,
+                              color: appStore.isDarkMode
+                                  ? white
+                                  : gray.withOpacity(0.8)),
+                          title: languages.lblSubscriptionHistory,
+                          trailing: Icon(Icons.chevron_right,
+                              color: appStore.isDarkMode
+                                  ? white
+                                  : gray.withOpacity(0.8),
+                              size: 24),
+                          onTap: () async {
+                            SubscriptionHistoryScreen()
+                                .launch(context)
+                                .then((value) {
+                              setState(() {});
+                            });
+                          },
+                        ),
+                    if (appStore.earningTypeSubscription)
+                      if (isUserTypeHandyman)
+                        Divider(
+                            height: 0,
+                            thickness: 1,
+                            indent: 15.0,
+                            endIndent: 15.0,
+                            color: context.dividerColor),
+                    if (isUserTypeHandyman)
                       SettingItemWidget(
-                        leading: Image.asset(services, height: 16, width: 16, color: appStore.isDarkMode ? white : gray.withOpacity(0.8)),
-                        title: languages.lblSubscriptionHistory,
-                        trailing: Icon(Icons.chevron_right, color: appStore.isDarkMode ? white : gray.withOpacity(0.8), size: 24),
-                        onTap: () async {
-                          SubscriptionHistoryScreen().launch(context).then((value) {
-                            setState(() {});
-                          });
+                        leading: Image.asset(services,
+                            height: 16,
+                            width: 16,
+                            color: appStore.isDarkMode
+                                ? white
+                                : gray.withOpacity(0.8)),
+                        title: languages.lblServices,
+                        trailing: Icon(Icons.chevron_right,
+                            color: appStore.isDarkMode
+                                ? white
+                                : gray.withOpacity(0.8),
+                            size: 24),
+                        onTap: () {
+                          ServiceListScreen().launch(context);
                         },
                       ),
-                    if (appStore.earningTypeSubscription) Divider(height: 0, thickness: 1, indent: 15.0, endIndent: 15.0, color: context.dividerColor),
-                    SettingItemWidget(
-                      leading: Image.asset(services, height: 16, width: 16, color: appStore.isDarkMode ? white : gray.withOpacity(0.8)),
-                      title: languages.lblServices,
-                      trailing: Icon(Icons.chevron_right, color: appStore.isDarkMode ? white : gray.withOpacity(0.8), size: 24),
-                      onTap: () {
-                        ServiceListScreen().launch(context);
-                      },
-                    ),
-                    Divider(height: 0, thickness: 1, indent: 15.0, endIndent: 15.0, color: context.dividerColor),
-                    if (appStore.userType != USER_TYPE_HANDYMAN)
-                      SettingItemWidget(
-                        leading: Image.asset(ic_document, height: 16, width: 16, color: appStore.isDarkMode ? white : gray.withOpacity(0.8)),
+                    if (isUserTypeHandyman)
+                      Divider(
+                          height: 0,
+                          thickness: 1,
+                          indent: 15.0,
+                          endIndent: 15.0,
+                          color: context.dividerColor),
+                    Visibility(
+                      visible: false,
+                      child: SettingItemWidget(
+                        leading: Image.asset(ic_document,
+                            height: 16,
+                            width: 16,
+                            color: appStore.isDarkMode
+                                ? white
+                                : gray.withOpacity(0.8)),
                         title: languages.btnVerifyId,
-                        trailing: Icon(Icons.chevron_right, color: appStore.isDarkMode ? white : gray.withOpacity(0.8), size: 24),
+                        trailing: Icon(Icons.chevron_right,
+                            color: appStore.isDarkMode
+                                ? white
+                                : gray.withOpacity(0.8),
+                            size: 24),
                         onTap: () {
                           VerifyProviderScreen().launch(context);
                         },
                       ),
-                    if (appStore.userType != USER_TYPE_HANDYMAN) Divider(height: 0, thickness: 1, indent: 15.0, endIndent: 15.0, color: context.dividerColor),
-                    if (appStore.userType != USER_TYPE_HANDYMAN)
-                      SettingItemWidget(
-                        leading: Image.asset(ic_blog, height: 16, width: 16, color: appStore.isDarkMode ? white : gray.withOpacity(0.8)),
+                    ),
+                    Visibility(
+                      visible: false,
+                      child: Divider(
+                          height: 0,
+                          thickness: 1,
+                          indent: 15.0,
+                          endIndent: 15.0,
+                          color: context.dividerColor),
+                    ),
+                    Visibility(
+                      visible: false,
+                      child: SettingItemWidget(
+                        leading: Image.asset(ic_blog,
+                            height: 16,
+                            width: 16,
+                            color: appStore.isDarkMode
+                                ? white
+                                : gray.withOpacity(0.8)),
                         title: languages.blogs,
-                        trailing: Icon(Icons.chevron_right, color: appStore.isDarkMode ? white : gray.withOpacity(0.8), size: 24),
+                        trailing: Icon(Icons.chevron_right,
+                            color: appStore.isDarkMode
+                                ? white
+                                : gray.withOpacity(0.8),
+                            size: 24),
                         onTap: () {
                           BlogListScreen().launch(context);
                         },
                       ),
-                    Divider(height: 0, thickness: 1, indent: 15.0, endIndent: 15.0, color: context.dividerColor),
+                    ),
+                    Visibility(
+                      visible: false,
+                      child: Divider(
+                          height: 0,
+                          thickness: 1,
+                          indent: 15.0,
+                          endIndent: 15.0,
+                          color: context.dividerColor),
+                    ),
                     SettingItemWidget(
-                      leading: Image.asset(handyman, height: 16, width: 16, color: appStore.isDarkMode ? white : gray.withOpacity(0.8)),
+                      leading: Image.asset(handyman,
+                          height: 16,
+                          width: 16,
+                          color: appStore.isDarkMode
+                              ? white
+                              : gray.withOpacity(0.8)),
                       title: languages.lblAllHandyman,
-                      trailing: Icon(Icons.chevron_right, color: appStore.isDarkMode ? white : gray.withOpacity(0.8), size: 24),
+                      trailing: Icon(Icons.chevron_right,
+                          color: appStore.isDarkMode
+                              ? white
+                              : gray.withOpacity(0.8),
+                          size: 24),
                       onTap: () {
                         HandymanListScreen().launch(context);
                       },
                     ),
-                    Divider(height: 0, thickness: 1, indent: 15.0, endIndent: 15.0, color: context.dividerColor),
-                    SettingItemWidget(
-                      leading: Image.asset(ic_packages, height: 16, width: 16, color: appStore.isDarkMode ? white : gray.withOpacity(0.8)),
-                      title: languages.packages,
-                      trailing: Icon(Icons.chevron_right, color: appStore.isDarkMode ? white : gray.withOpacity(0.8), size: 24),
-                      onTap: () {
-                        PackageListScreen().launch(context);
-                      },
+                    Divider(
+                        height: 0,
+                        thickness: 1,
+                        indent: 15.0,
+                        endIndent: 15.0,
+                        color: context.dividerColor),
+                    if (isUserTypeHandyman)
+                      SettingItemWidget(
+                        leading: Image.asset(ic_packages,
+                            height: 16,
+                            width: 16,
+                            color: appStore.isDarkMode
+                                ? white
+                                : gray.withOpacity(0.8)),
+                        title: languages.packages,
+                        trailing: Icon(Icons.chevron_right,
+                            color: appStore.isDarkMode
+                                ? white
+                                : gray.withOpacity(0.8),
+                            size: 24),
+                        onTap: () {
+                          PackageListScreen().launch(context);
+                        },
+                      ),
+                    if (isUserTypeHandyman)
+                      Divider(
+                          height: 0,
+                          thickness: 1,
+                          indent: 15.0,
+                          endIndent: 15.0,
+                          color: context.dividerColor),
+                    if (isUserTypeHandyman)
+                      SettingItemWidget(
+                        leading: Image.asset(ic_time_slots,
+                            height: 14,
+                            width: 16,
+                            color: appStore.isDarkMode
+                                ? white
+                                : gray.withOpacity(0.8)),
+                        title: languages.timeSlots,
+                        trailing: Icon(Icons.chevron_right,
+                            color: appStore.isDarkMode
+                                ? white
+                                : gray.withOpacity(0.8),
+                            size: 24),
+                        onTap: () {
+                          MyTimeSlotsScreen().launch(context);
+                        },
+                      ),
+                    if (isUserTypeHandyman)
+                      Divider(
+                          height: 0,
+                          thickness: 1,
+                          indent: 15.0,
+                          endIndent: 15.0,
+                          color: context.dividerColor),
+                    Visibility(
+                      visible: false,
+                      child: SettingItemWidget(
+                        leading: Image.asset(servicesAddress,
+                            height: 16,
+                            width: 16,
+                            color: appStore.isDarkMode
+                                ? white
+                                : gray.withOpacity(0.8)),
+                        title: languages.lblServiceAddress,
+                        trailing: Icon(Icons.chevron_right,
+                            color: appStore.isDarkMode
+                                ? white
+                                : gray.withOpacity(0.8),
+                            size: 24),
+                        onTap: () {
+                          ServiceAddressesScreen().launch(context);
+                        },
+                      ),
                     ),
-                    Divider(height: 0, thickness: 1, indent: 15.0, endIndent: 15.0, color: context.dividerColor),
-                    SettingItemWidget(
-                      leading: Image.asset(ic_time_slots, height: 14, width: 16, color: appStore.isDarkMode ? white : gray.withOpacity(0.8)),
-                      title: languages.timeSlots,
-                      trailing: Icon(Icons.chevron_right, color: appStore.isDarkMode ? white : gray.withOpacity(0.8), size: 24),
-                      onTap: () {
-                        MyTimeSlotsScreen().launch(context);
-                      },
+                    Visibility(
+                      visible: false,
+                      child: Divider(
+                          height: 0,
+                          thickness: 1,
+                          indent: 15.0,
+                          endIndent: 15.0,
+                          color: context.dividerColor),
                     ),
-                    Divider(height: 0, thickness: 1, indent: 15.0, endIndent: 15.0, color: context.dividerColor),
-                    SettingItemWidget(
-                      leading: Image.asset(servicesAddress, height: 16, width: 16, color: appStore.isDarkMode ? white : gray.withOpacity(0.8)),
-                      title: languages.lblServiceAddress,
-                      trailing: Icon(Icons.chevron_right, color: appStore.isDarkMode ? white : gray.withOpacity(0.8), size: 24),
-                      onTap: () {
-                        ServiceAddressesScreen().launch(context);
-                      },
+                    Visibility(
+                      visible: false,
+                      child: SettingItemWidget(
+                        leading: Image.asset(list,
+                            height: 16,
+                            width: 16,
+                            color: appStore.isDarkMode
+                                ? white
+                                : gray.withOpacity(0.8)),
+                        title: languages.bidList,
+                        trailing: Icon(Icons.chevron_right,
+                            color: appStore.isDarkMode
+                                ? white
+                                : gray.withOpacity(0.8),
+                            size: 24),
+                        onTap: () {
+                          BidListScreen().launch(context);
+                        },
+                      ),
                     ),
-                    Divider(height: 0, thickness: 1, indent: 15.0, endIndent: 15.0, color: context.dividerColor),
-                    SettingItemWidget(
-                      leading: Image.asset(list, height: 16, width: 16, color: appStore.isDarkMode ? white : gray.withOpacity(0.8)),
-                      title: languages.bidList,
-                      trailing: Icon(Icons.chevron_right, color: appStore.isDarkMode ? white : gray.withOpacity(0.8), size: 24),
-                      onTap: () {
-                        BidListScreen().launch(context);
-                      },
+                    Visibility(
+                      visible: false,
+                      child: Divider(
+                          height: 0,
+                          thickness: 1,
+                          indent: 15.0,
+                          endIndent: 15.0,
+                          color: context.dividerColor),
                     ),
-                    Divider(height: 0, thickness: 1, indent: 15.0, endIndent: 15.0, color: context.dividerColor),
-                    SettingItemWidget(
-                      leading: Image.asset(ic_tax, height: 18, width: 16, color: appStore.isDarkMode ? white : gray.withOpacity(0.8)),
-                      title: languages.lblTaxes,
-                      trailing: Icon(Icons.chevron_right, color: appStore.isDarkMode ? white : gray.withOpacity(0.8), size: 24),
-                      onTap: () {
-                        TaxesScreen().launch(context);
-                      },
+                    Visibility(
+                      visible: false,
+                      child: SettingItemWidget(
+                        leading: Image.asset(ic_tax,
+                            height: 18,
+                            width: 16,
+                            color: appStore.isDarkMode
+                                ? white
+                                : gray.withOpacity(0.8)),
+                        title: languages.lblTaxes,
+                        trailing: Icon(Icons.chevron_right,
+                            color: appStore.isDarkMode
+                                ? white
+                                : gray.withOpacity(0.8),
+                            size: 24),
+                        onTap: () {
+                          TaxesScreen().launch(context);
+                        },
+                      ),
                     ),
                     if (appStore.earningTypeCommission)
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Divider(height: 0, thickness: 1, indent: 15.0, endIndent: 15.0, color: context.dividerColor),
-                          SettingItemWidget(
-                            leading: Image.asset(ic_un_fill_wallet, height: 16, width: 16, color: appStore.isDarkMode ? white : gray.withOpacity(0.8)),
-                            title: languages.lblWalletHistory,
-                            trailing: Icon(Icons.chevron_right, color: appStore.isDarkMode ? white : gray.withOpacity(0.8), size: 24),
-                            onTap: () {
-                              WalletHistoryScreen().launch(context);
-                            },
-                          ),
-                        ],
+                      Visibility(
+                        visible: false,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Divider(
+                                height: 0,
+                                thickness: 1,
+                                indent: 15.0,
+                                endIndent: 15.0,
+                                color: context.dividerColor),
+                            SettingItemWidget(
+                              leading: Image.asset(ic_un_fill_wallet,
+                                  height: 16,
+                                  width: 16,
+                                  color: appStore.isDarkMode
+                                      ? white
+                                      : gray.withOpacity(0.8)),
+                              title: languages.lblWalletHistory,
+                              trailing: Icon(Icons.chevron_right,
+                                  color: appStore.isDarkMode
+                                      ? white
+                                      : gray.withOpacity(0.8),
+                                  size: 24),
+                              onTap: () {
+                                WalletHistoryScreen().launch(context);
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                    Divider(height: 0, thickness: 1, indent: 15.0, endIndent: 15.0, color: context.dividerColor),
+                    Divider(
+                        height: 0,
+                        thickness: 1,
+                        indent: 15.0,
+                        endIndent: 15.0,
+                        color: context.dividerColor),
                     SettingItemWidget(
-                      leading: Image.asset(ic_theme, height: 18, width: 16, color: appStore.isDarkMode ? white : gray.withOpacity(0.8)),
+                      leading: Image.asset(ic_theme,
+                          height: 18,
+                          width: 16,
+                          color: appStore.isDarkMode
+                              ? white
+                              : gray.withOpacity(0.8)),
                       title: languages.appTheme,
-                      trailing: Icon(Icons.chevron_right, color: appStore.isDarkMode ? white : gray.withOpacity(0.8), size: 24),
+                      trailing: Icon(Icons.chevron_right,
+                          color: appStore.isDarkMode
+                              ? white
+                              : gray.withOpacity(0.8),
+                          size: 24),
                       onTap: () async {
                         await showInDialog(
                           context,
@@ -301,41 +528,94 @@ class ProviderProfileFragmentState extends State<ProviderProfileFragment> {
                         );
                       },
                     ),
-                    Divider(height: 0, thickness: 1, indent: 15.0, endIndent: 15.0, color: context.dividerColor),
+                    Divider(
+                        height: 0,
+                        thickness: 1,
+                        indent: 15.0,
+                        endIndent: 15.0,
+                        color: context.dividerColor),
                     SettingItemWidget(
-                      leading: Image.asset(language, height: 14, width: 16, color: appStore.isDarkMode ? white : gray.withOpacity(0.8)),
+                      leading: Image.asset(language,
+                          height: 14,
+                          width: 16,
+                          color: appStore.isDarkMode
+                              ? white
+                              : gray.withOpacity(0.8)),
                       title: languages.language,
-                      trailing: Icon(Icons.chevron_right, color: appStore.isDarkMode ? white : gray.withOpacity(0.8), size: 24),
+                      trailing: Icon(Icons.chevron_right,
+                          color: appStore.isDarkMode
+                              ? white
+                              : gray.withOpacity(0.8),
+                          size: 24),
                       onTap: () {
                         LanguagesScreen().launch(context);
                       },
                     ),
-                    Divider(height: 0, thickness: 1, indent: 15.0, endIndent: 15.0, color: context.dividerColor),
+                    Divider(
+                        height: 0,
+                        thickness: 1,
+                        indent: 15.0,
+                        endIndent: 15.0,
+                        color: context.dividerColor),
                     SettingItemWidget(
-                      leading: Image.asset(changePassword, height: 18, width: 16, color: appStore.isDarkMode ? white : gray.withOpacity(0.8)),
+                      leading: Image.asset(changePassword,
+                          height: 18,
+                          width: 16,
+                          color: appStore.isDarkMode
+                              ? white
+                              : gray.withOpacity(0.8)),
                       title: languages.changePassword,
-                      trailing: Icon(Icons.chevron_right, color: appStore.isDarkMode ? white : gray.withOpacity(0.8), size: 24),
+                      trailing: Icon(Icons.chevron_right,
+                          color: appStore.isDarkMode
+                              ? white
+                              : gray.withOpacity(0.8),
+                          size: 24),
                       onTap: () {
                         ChangePasswordScreen().launch(context);
                       },
                     ),
-                    Divider(height: 0, indent: 16, endIndent: 16, color: context.dividerColor).visible(appStore.isLoggedIn),
+                    Divider(
+                            height: 0,
+                            indent: 16,
+                            endIndent: 16,
+                            color: context.dividerColor)
+                        .visible(appStore.isLoggedIn),
                     SettingItemWidget(
-                      leading: Image.asset(about, height: 14, width: 16, color: appStore.isDarkMode ? white : gray.withOpacity(0.8)),
+                      leading: Image.asset(about,
+                          height: 14,
+                          width: 16,
+                          color: appStore.isDarkMode
+                              ? white
+                              : gray.withOpacity(0.8)),
                       title: languages.lblAbout,
-                      trailing: Icon(Icons.chevron_right, color: appStore.isDarkMode ? white : gray.withOpacity(0.8), size: 24),
+                      trailing: Icon(Icons.chevron_right,
+                          color: appStore.isDarkMode
+                              ? white
+                              : gray.withOpacity(0.8),
+                          size: 24),
                       onTap: () {
                         AboutUsScreen().launch(context);
                       },
                     ),
-                    Divider(height: 0, thickness: 1, indent: 15.0, endIndent: 15.0, color: context.dividerColor),
+                    Divider(
+                        height: 0,
+                        thickness: 1,
+                        indent: 15.0,
+                        endIndent: 15.0,
+                        color: context.dividerColor),
                     SettingItemWidget(
-                      leading: Image.asset(ic_check_update, height: 16, width: 16, color: appStore.isDarkMode ? white : gray.withOpacity(0.8)),
+                      leading: Image.asset(ic_check_update,
+                          height: 16,
+                          width: 16,
+                          color: appStore.isDarkMode
+                              ? white
+                              : gray.withOpacity(0.8)),
                       title: languages.lblOptionalUpdateNotify,
                       trailing: Transform.scale(
                         scale: 0.7,
                         child: Switch.adaptive(
-                          value: getBoolAsync(UPDATE_NOTIFY, defaultValue: true),
+                          value:
+                              getBoolAsync(UPDATE_NOTIFY, defaultValue: true),
                           onChanged: (v) {
                             setValue(UPDATE_NOTIFY, v);
                             setState(() {});
@@ -348,13 +628,19 @@ class ProviderProfileFragmentState extends State<ProviderProfileFragment> {
                 ),
               ),
               SettingSection(
-                title: Text(languages.lblDangerZone.toUpperCase(), style: boldTextStyle(color: redColor)),
-                headingDecoration: BoxDecoration(color: redColor.withOpacity(0.08)),
+                title: Text(languages.lblDangerZone.toUpperCase(),
+                    style: boldTextStyle(color: redColor)),
+                headingDecoration:
+                    BoxDecoration(color: redColor.withOpacity(0.08)),
                 divider: Offstage(),
                 items: [
                   8.height,
                   SettingItemWidget(
-                    leading: ic_delete_account.iconImage(size: 20, color: appStore.isDarkMode ? white : gray.withOpacity(0.8)),
+                    leading: ic_delete_account.iconImage(
+                        size: 20,
+                        color: appStore.isDarkMode
+                            ? white
+                            : gray.withOpacity(0.8)),
                     paddingBeforeTrailing: 4,
                     title: languages.lblDeleteAccount,
                     onTap: () {
@@ -393,13 +679,16 @@ class ProviderProfileFragmentState extends State<ProviderProfileFragment> {
               ),
               16.height,
               TextButton(
-                child: Text(languages.logout, style: boldTextStyle(color: primaryColor, size: 16)),
+                child: Text(languages.logout,
+                    style: boldTextStyle(color: primaryColor, size: 16)),
                 onPressed: () {
                   appStore.setLoading(false);
                   logout(context);
                 },
               ).center().visible(appStore.isLoggedIn),
-              VersionInfoWidget(prefixText: 'v', textStyle: secondaryTextStyle()).center(),
+              VersionInfoWidget(
+                      prefixText: 'v', textStyle: secondaryTextStyle())
+                  .center(),
               16.height,
             ],
           );

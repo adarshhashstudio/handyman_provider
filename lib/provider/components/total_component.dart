@@ -22,7 +22,11 @@ class TotalComponent extends StatelessWidget {
       spacing: 16,
       runSpacing: 16,
       children: [
-        TotalWidget(title: languages.lblTotalBooking, total: snap.totalBooking.toString(), icon: total_booking).onTap(
+        TotalWidget(
+                title: 'Total Requests',
+                total: snap.totalBooking.toString(),
+                icon: total_booking)
+            .onTap(
           () {
             LiveStream().emit(LIVESTREAM_PROVIDER_ALL_BOOKING, 1);
           },
@@ -30,7 +34,8 @@ class TotalComponent extends StatelessWidget {
           splashColor: Colors.transparent,
         ),
         TotalWidget(
-          title: languages.lblTotalService,
+          title:
+              isUserTypeProvider ? 'Open Requests' : languages.lblTotalService,
           total: snap.totalService.validate().toString(),
           icon: total_services,
         ).onTap(
@@ -53,9 +58,12 @@ class TotalComponent extends StatelessWidget {
             splashColor: Colors.transparent,
           ),
         TotalWidget(
-          title: languages.monthlyEarnings,
-          total:
-              "${isCurrencyPositionLeft ? appStore.currencySymbol : ""}${snap.totalRevenue.validate().toStringAsFixed(DECIMAL_POINT).formatNumberWithComma()}${isCurrencyPositionRight ? appStore.currencySymbol : ""}",
+          title: isUserTypeProvider
+              ? 'Total Inspections'
+              : languages.monthlyEarnings,
+          total: isUserTypeProvider
+              ? '0'
+              : "${isCurrencyPositionLeft ? appStore.currencySymbol : ""}${snap.totalRevenue.validate().toStringAsFixed(DECIMAL_POINT).formatNumberWithComma()}${isCurrencyPositionRight ? appStore.currencySymbol : ""}",
           icon: percent_line,
         ).onTap(
           () {
@@ -66,10 +74,12 @@ class TotalComponent extends StatelessWidget {
         ),
         if (snap.earningType == EARNING_TYPE_COMMISSION)
           TotalWidget(
-            title: languages.lblWallet,
-            total:
-                "${isCurrencyPositionLeft ? appStore.currencySymbol : ""}${snap.providerWallet != null ? snap.providerWallet?.amount.validate().toStringAsFixed(DECIMAL_POINT).formatNumberWithComma() : "0"}${isCurrencyPositionRight ? appStore.currencySymbol : ""}",
-            icon: un_fill_wallet,
+            title:
+                isUserTypeProvider ? 'Open Inspections' : languages.lblWallet,
+            total: isUserTypeProvider
+                ? '0'
+                : "${isCurrencyPositionLeft ? appStore.currencySymbol : ""}${snap.providerWallet != null ? snap.providerWallet?.amount.validate().toStringAsFixed(DECIMAL_POINT).formatNumberWithComma() : "0"}${isCurrencyPositionRight ? appStore.currencySymbol : ""}",
+            icon: isUserTypeProvider ? total_booking : un_fill_wallet,
           ).onTap(
             () {
               WalletHistoryScreen().launch(context);

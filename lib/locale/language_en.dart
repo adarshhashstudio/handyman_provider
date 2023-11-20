@@ -80,7 +80,7 @@ class LanguageEn extends Languages {
   String get appTheme => 'App Theme';
 
   @override
-  String get bookingHistory => 'Booking History';
+  String get bookingHistory => 'Request History';
 
   @override
   String get logout => 'Logout';
@@ -209,10 +209,10 @@ class LanguageEn extends Languages {
   String get lblAddHandyman => "Add Technician";
 
   @override
-  String get lblBooking => 'Bookings';
+  String get lblBooking => 'Requests';
 
   @override
-  String get lblTotalBooking => 'Total Booking';
+  String get lblTotalBooking => 'Total Requests';
 
   @override
   String get lblTotalService => 'Total Service';
@@ -227,7 +227,7 @@ class LanguageEn extends Languages {
   String get lblPayment => 'Payments';
 
   @override
-  String get lblBookingID => 'Booking ID';
+  String get lblBookingID => 'Request ID';
 
   @override
   String get lblPaymentID => 'Payment ID';
@@ -608,7 +608,7 @@ class LanguageEn extends Languages {
   String get lblChooseYourPlan => "Choose Your Plan";
 
   @override
-  String get lblRenewSubTitle => "Buy new plan to get new service bookings";
+  String get lblRenewSubTitle => "Buy new plan to get new service requests";
 
   @override
   String get lblReminder => "Reminder";
@@ -701,13 +701,13 @@ class LanguageEn extends Languages {
   String get lblHelpLineNum => "Helpline Number";
 
   @override
-  String get lblReasonCancelling => "Reason for cancelling this booking";
+  String get lblReasonCancelling => "Reason for cancelling this request";
 
   @override
-  String get lblReasonRejecting => "Reason for rejecting this booking";
+  String get lblReasonRejecting => "Reason for rejecting this request";
 
   @override
-  String get lblFailed => "Reason why this booking is failed";
+  String get lblFailed => "Reason why this request is failed";
 
   @override
   String get lblDesignation => "Designation";
@@ -842,7 +842,7 @@ class LanguageEn extends Languages {
   String get lblHourly => "Hourly";
 
   @override
-  String get noBookingTitle => "No Booking Found";
+  String get noBookingTitle => "No Request Found";
 
   @override
   String get noBookingSubTitle => "Looks like your customer haven't book your services yet";
@@ -1034,7 +1034,7 @@ class LanguageEn extends Languages {
   String get somethingWentWrong => 'Something Went Wrong';
 
   @override
-  String get upcomingBookings => 'Upcoming Bookings';
+  String get upcomingBookings => 'Upcoming Requests';
 
   @override
   String get postJob => 'Post Job';
@@ -1548,7 +1548,7 @@ class LanguageEn extends Languages {
   String get from => "From";
 
   @override
-  String get booking => "Booking";
+  String get booking => "Request";
 
   @override
   String get choosePaymentMethod => "Choose Payment Method";
@@ -1629,7 +1629,7 @@ class LanguageEn extends Languages {
   String get search => 'Search';
 
   @override
-  String get wouldYouLikeToAssignThisBooking => 'Would you like to assign this booking?';
+  String get wouldYouLikeToAssignThisBooking => 'Would you like to assign this request?';
 
   @override
   String get connect => 'Connect';
